@@ -1,13 +1,13 @@
 #Creates a new model
-MODEL_CREATE = False
+MODEL_CREATE = True
 #Data csv
 MODEL_DATA = 'STRABnet_Artifical_Classifier.csv'
 #Saves a new model
-MODEL_SAVE = False
+MODEL_SAVE = True
 #Model save name
 MODEL_SAVE_NAME = 'STRABnet_model.h5'
 #Loads an existing model (if set to false, will use created model)
-MODEL_LOAD = True
+MODEL_LOAD = False
 #Model to load
 MODEL_LOAD_NAME = 'STRABnet_model_V1.h5'
 #Run predictions
@@ -25,15 +25,22 @@ from keras.utils import to_categorical
 from keras.models import load_model
 from keras import optimizers
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 print("Complete")
 
 if(MODEL_CREATE):
     data = pd.read_csv(MODEL_DATA)
+    scaler = MinMaxScaler()
+    scaler.fit(data)
+    scaler.transform(data)
+
 
     predictors = data.drop(['Class'], axis=1).as_matrix()
 
     n_cols = predictors.shape[1]
+
+
 
     # Convert the target to categorical: target
     target = to_categorical(data.Class)
@@ -42,12 +49,10 @@ if(MODEL_CREATE):
     model = Sequential()
 
     # Add the first layer
-    model.add(Dense(100, activation='relu', input_shape=(n_cols,)))
+    model.add(Dense(32, activation='sigmoid', input_shape=(n_cols,)))
 
     #Add the hidden layers
-    model.add(Dense(100, activation='relu'))
-
-    model.add(Dense(100, activation='relu'))
+    model.add(Dense(32, activation='sigmoid'))
 
     # Add the output layer
     model.add(Dense(9, activation='softmax'))
@@ -57,7 +62,7 @@ if(MODEL_CREATE):
     model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
 
     # Fit the model
-    model.fit(predictors, target, epochs=50)
+    model.fit(predictors, target, epochs=1000)
 
 if(MODEL_SAVE):
     model.save(MODEL_SAVE_NAME)
@@ -86,7 +91,7 @@ if(PREDICT):
         for i in range(0,9):
             if case[i] > case[diagnosis]:
                 diagnosis = i
-        if(case[diagnosis] > .25):
+        if(case[diagnosis] > 0):
             print(counter, diagnosis)
         else:
             print(counter, "No Significant answer")
