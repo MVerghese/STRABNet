@@ -1,15 +1,15 @@
 #Creates a new model
-MODEL_CREATE = True
+MODEL_CREATE = False
 #Data csv
 MODEL_DATA = 'STRABnet_Artifical_Classifier.csv'
 #Saves a new model
-MODEL_SAVE = True
+MODEL_SAVE = False
 #Model save name
 MODEL_SAVE_NAME = 'STRABnet_model.h5'
 #Loads an existing model (if set to false, will use created model)
-MODEL_LOAD = False
+MODEL_LOAD = True
 #Model to load
-MODEL_LOAD_NAME = 'STRABnet_model_V1.h5'
+MODEL_LOAD_NAME = 'STRABnet_model100.h5'
 #Run predictions
 PREDICT = True
 #Prediction data
