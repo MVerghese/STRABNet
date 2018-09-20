@@ -30,6 +30,8 @@ from sklearn.preprocessing import MinMaxScaler
 print("Complete")
 
 if(MODEL_CREATE):
+
+    #FLoad and format data
     data = pd.read_csv(MODEL_DATA)
     scaler = MinMaxScaler()
     scaler.fit(data)
@@ -37,24 +39,13 @@ if(MODEL_CREATE):
 
 
     predictors = data.drop(['Class'], axis=1).as_matrix()
-
     n_cols = predictors.shape[1]
-
-
-
-    # Convert the target to categorical: target
     target = to_categorical(data.Class)
 
-    # Set up the model
+    #Create model as two layers of 32 hidden nodes and then the output layer
     model = Sequential()
-
-    # Add the first layer
     model.add(Dense(32, activation='sigmoid', input_shape=(n_cols,)))
-
-    #Add the hidden layers
     model.add(Dense(32, activation='sigmoid'))
-
-    # Add the output layer
     model.add(Dense(9, activation='softmax'))
 
     # Compile the model
@@ -79,8 +70,6 @@ if(PREDICT):
 
     # Calculate predictions: predictions
     predictions = model.predict(pred_data)
-
-    # Calculate predicted probability of survival: predicted_prob_true
     predicted_prob_true = predictions[:,1]
 
     # print predicted_prob_true
